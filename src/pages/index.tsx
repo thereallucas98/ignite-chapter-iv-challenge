@@ -50,10 +50,7 @@ export default function Home(): JSX.Element {
       return imageData.data.flat();
     });
 
-    console.log(data?.pages);
-    console.log(formatted);
-    return formatted
-
+    return formatted;
   }, [data]);
 
   // RENDER LOADING SCREEN
@@ -62,8 +59,8 @@ export default function Home(): JSX.Element {
   }
 
   // RENDER ERROR SCREEN
-  if (isLoading && isError) {
-    return <Loading />;
+  if (!isLoading && isError) {
+    return <Error />;
   }
 
   return (
@@ -72,7 +69,16 @@ export default function Home(): JSX.Element {
 
       <Box maxW={1120} px={20} mx="auto" my={20}>
         <CardList cards={formattedData} />
-        {/* TODO RENDER LOAD MORE BUTTON IF DATA HAS NEXT PAGE */}
+        {/* RENDER LOAD MORE BUTTON IF DATA HAS NEXT PAGE */}
+        {hasNextPage && (
+          <Button
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+            mt="6"
+          >
+            {isFetchingNextPage ? 'Carregando...' : 'Carregar mais'}
+          </Button>
+        )}
       </Box>
     </>
   );
